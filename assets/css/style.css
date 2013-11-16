@@ -183,6 +183,31 @@ nav.fixed-top {
   top: 145px;
   overflow: auto;
 }
+#lightbox {
+  background: #fff;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  bottom: 20px;
+  right: 20px;
+  transition: ease-in-out all 0.2s;
+  z-index: 999999;
+}
+#lightbox > .light-close {
+  color: #333;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+#lightbox > .content {
+  position: absolute;
+  top: 20px;
+  bottom: 10px;
+  right: 20px;
+  left: 20px;
+  border: 1px solid #f5f5f5;
+}
 h1.title,
 span.icn-desc {
   display: inline-block;
@@ -210,120 +235,9 @@ span.icn-desc.title > a > i[class*='icon'] {
   vertical-align: middle;
   margin-right: 5px;
 }
-#primary-content {
-  float: right;
-  padding: 20px 20px 0 20px;
-  width: 75%;
-}
-#primary-content > .search {
-  height: 80px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid #000;
-  padding: 10px;
-}
-#primary-content > .search > label {
-  color: #eee;
-  display: block;
-  font-size: 1.2em;
-  font-weight: 500;
-}
-#primary-content > .search > input[type='search'] {
-  background: rgba(255,255,255,0.9);
-  border: 1px solid #ccc;
-  padding-left: 20px;
-  height: 30px;
-  width: 100%;
-}
-#sidebar {
-  background: rgba(0,0,0,0.08);
-  border-right: 1px solid rgba(0,0,0,0.1);
-  width: 25%;
-  min-width: 300px;
-  padding: 20px 20px 0 20px;
-  position: fixed;
-  left: 0;
-  top: 145px;
-  bottom: 0;
-}
-#sidebar > .nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-#sidebar > .nav-list > li {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  height: 30px;
-  line-height: 30px;
-  margin-bottom: 3px;
-}
-#sidebar > .nav-list > li:hover {
-  background: rgba(0,0,0,0.1);
-}
-#sidebar > .nav-list > li a {
-  color: #fff;
-  display: block;
-  text-decoration: none;
-}
-#sidebar > .nav-list > li a:hover {
-  color: #e8c00c;
-}
-#sidebar > .nav-list > li i[class*='icon'] {
-  margin: 0 15px 0 15px;
-}
-#sidebar > .nav-list > li.active {
-  background: #369;
-}
-#sidebar > .list-title {
-  color: #aeaeae;
-  font-weight: 500;
-  text-shadow: -1px -1px 1px rgba(0,0,0,0.3);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  padding-bottom: 5px;
-  padding-left: 10px;
-}
-.dialog {
-  background: rgba(255,255,255,0.9);
-  border: 1px solid #fff;
-  display: none;
-  padding: 10px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  min-height: 300px;
-  height: auto;
-  width: 300px;
-  margin: -150px 0 0 -150px;
-  z-index: 999999;
-}
-.dialog > button.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  margin: 0;
-}
-.dialog > h1.title {
-  color: #444;
-  height: auto;
-  margin-bottom: 20px;
-  vertical-align: middle;
-}
-.dialog > h1.title i[class*='icon'] {
-  color: #e8c00c;
-  font-size: 0.8em;
-  vertical-align: top;
-  margin-right: 5px;
-}
-.dialog .form-control {
-  margin-bottom: 5px;
-}
-.dialog button {
-  margin-top: 15px;
-}
 .overlay {
   background: rgba(0,0,0,0.7);
-  display: none;
+  display: block;
   position: fixed;
   top: 0;
   bottom: 0;

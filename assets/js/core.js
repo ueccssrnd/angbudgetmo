@@ -16,7 +16,11 @@ BudgetMo = (function() {
     return this.listen();
   };
 
-  BudgetMo.prototype.listen = function() {};
+  BudgetMo.prototype.listen = function() {
+    return $('#lightbox').on('click', '.light-close', function(e) {
+      return BudgetMo.prototype.ui.lightbox.hide();
+    });
+  };
 
   BudgetMo.prototype.ui = {
     vars: {
@@ -24,7 +28,17 @@ BudgetMo = (function() {
       page: {},
       content_tpl: "home"
     },
-    build: function() {}
+    build: function() {},
+    lightbox: {
+      show: function() {
+        $('.overlay').show();
+        return $('#lightbox').show();
+      },
+      hide: function() {
+        $('.overlay').hide();
+        return $('#lightbox').hide();
+      }
+    }
   };
 
   return BudgetMo;

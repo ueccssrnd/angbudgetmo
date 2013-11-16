@@ -10,6 +10,9 @@ class BudgetMo
     this.ui.build()
     this.listen()
   listen: () ->
+    $('#lightbox').on 'click', '.light-close', (e) ->
+      BudgetMo::ui.lightbox.hide()
+
   ui: {
     vars: {
       breadcrumbs: []
@@ -17,7 +20,16 @@ class BudgetMo
       content_tpl: "home"
     }
     build: () ->
-      
+
+    lightbox: {
+      show: () ->
+        $('.overlay').show()
+        $('#lightbox').show()
+      hide: () ->
+        $('.overlay').hide()
+        $('#lightbox').hide()
+
+    }
   }
 
 class Visuals
