@@ -8,20 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 $app = new Silex\Application();
 $app['debug'] = true;
 
-$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-    // Doctrine DBAL settings goes here
-    'db.options' => array(
-        'driver' => 'pdo_mysql',
-        'user' => 'root',
-        'password' => '',
-        'dbname' => 'angbudgetmo',
-        'host' => 'localhost'
-    )
-));
-
-$app->get('/hello', function() {
-            return 'Hello!';
-        });
+// Database connection string/doctrine, security :)
+require_once 'helper/db.php';
 
 $app->get('/users/{id}', function($id) use ($app) {
             $sql = "SELECT * FROM users WHERE users.id = ?";
@@ -41,8 +29,8 @@ $app->get('/users/{id}', function($id) use ($app) {
                     FROM category_breakdowns
                     WHERE category_id = ?";
 
-            foreach ($user['allocations'] as $sector) {
-                $user['allocations'][$sector['category_id'] - 1]['assignments'] = $app['db']->fetchAll($sql, array((int) $sector['category_id']));
+            foreach ($user['allocations'] as &$sector) {
+                $sector['assignments'] = $app['db']->fetchAll($sql, array((int) $sector['category_id']));
             }
 
             return new response(json_encode($user), 201);
@@ -55,13 +43,13 @@ $app->get('/people', function() use ($app) {
                 FROM allocations WHERE user_id > 1 GROUP BY category_id ";
             $people['allocations'] = $app['db']->fetchAll($sql);
 
-//            $sql = "SELECT full_name, amount, unit, image
-//                    FROM category_breakdowns
-//                    WHERE category_id = ?";
-//
-//            foreach ($people['allocations'] as $sector) {
-//                $people['allocations'][$sector['category_id'] - 1]['assignments'] = $app['db']->fetchAll($sql, array((int) $sector['category_id']));
-//            }
+            $sql = "SELECT full_name, amount, unit, image
+                    FROM category_breakdowns
+                    WHERE category_id = ?";
+
+            foreach ($people['allocations'] as $sector) {
+                $people['allocations'][$sector['category_id'] - 1]['assignments'] = $app['db']->fetchAll($sql, array((int) $sector['category_id']));
+            }
 
             return new response(json_encode($people), 201);
         });
@@ -72,21 +60,24 @@ $app->post('/users', function (Request $request) use ($app) {
             $user_type = 'citizen';
             $email = $request->get('email');
 //            Insert check if valid data
-            $app['db']->insert('users', array('id' => $id , 'full_name' => $full_name, 'user_type' => $user_type, 'email' => $email));
-
+            $app['db']->insert('users', array('id' => $id, 'full_name' => $full_name, 'user_type' => $user_type, 'email' => $email));
             return new Response("User id $id inserted", 201);
         });
-        
+
 //        Must be well-formed and contain all 5
 $app->post('/allocations', function (Request $request) use ($app) {
-            $user_id = $request->get('user_id');
-            $category_id = $request->get('category_id');
-            $budget_allocation = $request->get('budget_allocation');
-            $amount = $request->get('amount');
-//            Insert check if valid data
-            $app['db']->insert('allocations', array('user_id' => $user_id , 'category_id' => $category_id, 'budget_allocation' => $budget_allocation, 'amount' => $amount));
+            $allocations = json_decode($request->get('data'),1);
 
-            return new Response("User id $user_id inserted", 201);
+            foreach ($allocations as $allocation) {
+                $app['db']->insert('allocations', array('user_id' => $allocation['user_id'],
+                    'category_id' => $allocation['category_id'],
+                    'budget_allocation' => $allocation['budget_allocation'],
+                    'amount' => $allocation['amount']));
+            }
+//            Insert check if valid data
+
+
+            return new Response("User id  inserted" . var_dump($allocations), 201);
         });
-        
+
 $app->run();

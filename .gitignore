@@ -6,3 +6,6 @@ vendors/js/jquery-ui/
 
 .DS_Store
 api/nbproject
+/nbproject/private/
+/api/web/helper/db.php
+nbproject/
