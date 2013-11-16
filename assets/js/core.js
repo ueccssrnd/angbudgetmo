@@ -24,7 +24,9 @@ BudgetMo = (function() {
     return $('.graph-picker').on('click', 'a', function(e) {
       var sector;
       sector = $(this).data('sector');
-      return Visuals.prototype.updateGraph(sector);
+      Visuals.prototype.updateGraph(sector);
+      $('.graph-parts-nav').find('a.active').removeClass('active');
+      return $(this).addClass('active');
     });
   };
 
@@ -54,8 +56,6 @@ Visuals = (function() {
 
   Visuals.prototype.vars = {
     data: {
-      total: 10000000000,
-      tempTotal: Visuals.total,
       gov: [10, 50, 80, 30, 150],
       collated: [60, 70, 80, 90, 100],
       custom: {
@@ -201,18 +201,17 @@ Visuals = (function() {
   };
 
   Visuals.prototype.drawGraph = function() {
-    var arc, arcs, canvas, color, data, defSector, doughnut, group, height, i, image, layout, radius, sum, update, width, _i, _len, _ref;
+    var arc, arcs, canvas, color, data, doughnut, group, height, i, image, layout, radius, sum, update, width, _i, _len, _ref;
     sum = 0;
     height = "100%";
     width = "100%";
     radius = 150;
-    defSector = Visuals.prototype.vars.data.custom.allocations[0];
     _ref = Visuals.prototype.vars.data.custom.allocations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       i = _ref[_i];
       sum += parseInt(i.amount);
     }
-    data = [0, Visuals.prototype.vars.data.total];
+    data = [0, sum];
     color = ["#fcc427", "#999"];
     image = "social";
     canvas = d3.select(".graph-preview .graph").append("svg").style("width", width).style("height", height);
@@ -227,31 +226,31 @@ Visuals = (function() {
     doughnut = arcs.append("path").attr("d", arc).attr("fill", function(d, i) {
       return color[i];
     }).attr("stroke", "#fff").attr("stroke-width", 2);
-    $(".a, .b, .c, .d").width((data[0] / (data[0] + data[1]) * 100) + "%");
-    $('.total-budget').text(Visuals.prototype.vars.data.total);
+    $('.total-budget span').text(sum);
+    $(".a, .b, .c, .d").width(0);
     $("#slider-range-min").slider({
       range: "min",
-      value: data[0] / (data[0] + data[1]) * 100,
+      value: 0,
       min: 0,
       max: 100,
       slide: function(event, ui) {
+        var tempTotal;
         $(".a, .b, .c, .d").width(ui.value + "%");
-        Visuals.prototype.vars.data.tempTotal = Visuals.prototype.vars.data.total - ui.value / 100 * Visuals.prototype.vars.data.total;
-        return update(data[0], ui.value / 100 * Visuals.prototype.vars.data.total);
+        tempTotal = (100 - ui.value) / 100 * sum;
+        $('.total-budget span').text(tempTotal);
+        return update(ui.value / 100 * sum);
       }
     });
     $(".ui-slider-handle").html("&#xf053;&#xf054;");
-    return update = function(old, value) {
+    return update = function(value) {
       var newData;
-      newData = [value, Visuals.prototype.vars.data.total - value];
+      newData = [0, sum - value];
       arcs.data(layout(newData));
       return arcs.select("path").attr("d", arc);
     };
   };
 
-  Visuals.prototype.updateGraph = function(sector) {
-    return console.log(Visuals.prototype.vars.data.tempTotal);
-  };
+  Visuals.prototype.updateGraph = function(sector) {};
 
   Visuals.prototype.tempLightboxGraph = function() {
     return Visuals.prototype.drawGraph();
