@@ -43,11 +43,18 @@
   <div id="lightbox">
     <span class="light-close fa fa-times"></span>
     <section class="content">
+      <h1 class="total-budget"></h1>
       <div class="graph-preview light-section col-sm-6">
         <div class="graph"></div>
         <div class="graph-slider">
-          <div id="slider"></div>
-          </div> 
+          <div class="cube">
+            <div class="a"></div>
+            <div class="b"></div>
+            <div class="c"></div>
+            <div class="d"></div>
+            <div id="slider-range-min"></div>
+          </div>
+        </div> 
       </div>
       <div class="graph-context light-section col-sm-6">
         <section class="bubble">
@@ -78,7 +85,23 @@
           </ul>
         </section>
       </div>
-      <div class="graph-parts-nav">Full</div>
+      <ul class="graph-parts-nav">
+        <li class="graph-picker">
+          <a class="active" href="#" data-sector="economic"><img src="assets/img/economic-150.png" alt=""></a>
+        </li>
+        <li class="graph-picker">
+          <a href="#" data-sector="defense"><img src="assets/img/defense-150.png" alt=""></a>
+        </li>
+        <li class="graph-picker">
+          <a href="#" data-sector="social"><img src="assets/img/social-150.png" alt=""></a>
+        </li>
+        <li class="graph-picker">
+          <a href="#" data-sector="public"><img src="assets/img/public-150.png" alt=""></a>
+        </li>
+        <li class="graph-picker">
+          <a href="#" data-sector="debt"><img src="assets/img/debt-150.png" alt=""></a>
+        </li>
+      </ul>
     </section>
   </div>
   <script src="vendors/js/jquery/jquery-2.0.3.min.js"></script>

@@ -14,12 +14,17 @@ BudgetMo = (function() {
   BudgetMo.prototype.init = function() {
     this.ui.build();
     this.listen();
-    return Visuals.prototype.tempLightboxGraph();
+    return Visuals.prototype.drawGraph();
   };
 
   BudgetMo.prototype.listen = function() {
-    return $('#lightbox').on('click', '.light-close', function(e) {
+    $('#lightbox').on('click', '.light-close', function(e) {
       return BudgetMo.prototype.ui.lightbox.hide();
+    });
+    return $('.graph-picker').on('click', 'a', function(e) {
+      var sector;
+      sector = $(this).data('sector');
+      return Visuals.prototype.updateGraph(sector);
     });
   };
 
@@ -49,9 +54,141 @@ Visuals = (function() {
 
   Visuals.prototype.vars = {
     data: {
+      total: 10000000000,
+      tempTotal: Visuals.total,
       gov: [10, 50, 80, 30, 150],
       collated: [60, 70, 80, 90, 100],
-      custom: []
+      custom: {
+        "name": {
+          "id": "3",
+          "full_name": "Darll2",
+          "user_type": "citizen",
+          "email": "aryll2@gov.ph"
+        },
+        "allocations": [
+          {
+            "sector": "Social Services",
+            "budget_allocation": "97",
+            "amount": "942800000",
+            "category_id": "1",
+            "assignments": [
+              {
+                "full_name": "Health facility",
+                "amount": "5",
+                "unit": ""
+              }, {
+                "full_name": "Health worker",
+                "amount": "117045",
+                "unit": ""
+              }, {
+                "full_name": "Classroom",
+                "amount": "873028",
+                "unit": ""
+              }, {
+                "full_name": "Teacher",
+                "amount": "259082",
+                "unit": ""
+              }, {
+                "full_name": "Textbook",
+                "amount": "195",
+                "unit": ""
+              }
+            ]
+          }, {
+            "sector": "Economic Services",
+            "budget_allocation": "96",
+            "amount": "990200000",
+            "category_id": "2",
+            "assignments": [
+              {
+                "full_name": "Road",
+                "amount": "12",
+                "unit": "per km"
+              }, {
+                "full_name": "Seedline",
+                "amount": "38",
+                "unit": ""
+              }, {
+                "full_name": "Fist port",
+                "amount": "416",
+                "unit": ""
+              }, {
+                "full_name": "Fertilizer",
+                "amount": "347",
+                "unit": "per sack"
+              }, {
+                "full_name": "Livestock",
+                "amount": "34",
+                "unit": ""
+              }
+            ]
+          }, {
+            "sector": "General Public Services",
+            "budget_allocation": "96",
+            "amount": "964500000",
+            "category_id": "3",
+            "assignments": [
+              {
+                "full_name": "Carrier truck",
+                "amount": "3",
+                "unit": ""
+              }, {
+                "full_name": "Business permit",
+                "amount": "4464",
+                "unit": ""
+              }, {
+                "full_name": "NBI clearance",
+                "amount": "150",
+                "unit": ""
+              }, {
+                "full_name": "Passport",
+                "amount": "2407",
+                "unit": ""
+              }, {
+                "full_name": "NBI clearance",
+                "amount": "150",
+                "unit": ""
+              }, {
+                "full_name": "Visa",
+                "amount": "328",
+                "unit": ""
+              }
+            ]
+          }, {
+            "sector": "Debt Burden",
+            "budget_allocation": "97",
+            "amount": "977600000",
+            "category_id": "4",
+            "assignments": [
+              {
+                "full_name": "Debt",
+                "amount": "338",
+                "unit": "total"
+              }
+            ]
+          }, {
+            "sector": "Defense",
+            "budget_allocation": "9",
+            "amount": "92900000",
+            "category_id": "5",
+            "assignments": [
+              {
+                "full_name": "Aircraft",
+                "amount": "35",
+                "unit": "per plane"
+              }, {
+                "full_name": "Flood control structure",
+                "amount": "46",
+                "unit": ""
+              }, {
+                "full_name": "Vehicular radio",
+                "amount": "2",
+                "unit": ""
+              }
+            ]
+          }
+        ]
+      }
     }
   };
 
@@ -63,53 +200,61 @@ Visuals = (function() {
     return radius = 150;
   };
 
-  Visuals.prototype.tempLightboxGraph = function() {
-    var arc, arcs, canvas, color, data, doughnut, group, height, layout, otherValues, radius, sum, sumOtherVal, update, width;
-    height = '100%';
-    width = '100%';
-    sum = function(arr) {
-      var i, _i, _len;
-      sum = 0;
-      for (_i = 0, _len = arr.length; _i < _len; _i++) {
-        i = arr[_i];
-        sum += i;
-      }
-      return sum;
-    };
-    otherValues = [30, 10, 80];
-    sumOtherVal = sum(otherValues);
-    data = [50, sumOtherVal];
-    color = ["#fcc427", "#888"];
+  Visuals.prototype.drawGraph = function() {
+    var arc, arcs, canvas, color, data, defSector, doughnut, group, height, i, image, layout, radius, sum, update, width, _i, _len, _ref;
+    sum = 0;
+    height = "100%";
+    width = "100%";
     radius = 150;
+    defSector = Visuals.prototype.vars.data.custom.allocations[0];
+    _ref = Visuals.prototype.vars.data.custom.allocations;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      i = _ref[_i];
+      sum += parseInt(i.amount);
+    }
+    data = [0, Visuals.prototype.vars.data.total];
+    color = ["#fcc427", "#999"];
+    image = "social";
     canvas = d3.select(".graph-preview .graph").append("svg").style("width", width).style("height", height);
     arc = d3.svg.arc().outerRadius(radius).innerRadius(radius * 0.8);
     layout = d3.layout.pie().sort(null).value(function(d) {
       return d;
     });
-    group = canvas.append("g").attr("transform", "translate(200,200)");
+    group = canvas.append("g").attr("class", "graph-group").attr("transform", "translate(300,200)");
     group.append("circle").attr("cx", 0).attr("cy", 0).attr("r", radius * 0.8).attr("fill", "white");
-    group.append("image").attr("xlink:href", "assets/img/social-150.png").attr("x", radius / 2 * -1).attr("y", radius / 2 * -1).attr("width", radius).attr("height", radius);
+    group.append("image").attr("xlink:href", "assets/img/" + image + "-150.png").attr("x", radius / 2 * -1).attr("y", radius / 2 * -1).attr("width", radius).attr("height", radius);
     arcs = group.selectAll(".arc").data(layout(data)).enter().append("g").attr("class", "arc");
     doughnut = arcs.append("path").attr("d", arc).attr("fill", function(d, i) {
       return color[i];
     }).attr("stroke", "#fff").attr("stroke-width", 2);
-    $("#slider").slider({
-      value: data[0],
+    $(".a, .b, .c, .d").width((data[0] / (data[0] + data[1]) * 100) + "%");
+    $('.total-budget').text(Visuals.prototype.vars.data.total);
+    $("#slider-range-min").slider({
+      range: "min",
+      value: data[0] / (data[0] + data[1]) * 100,
       min: 0,
-      max: sumOtherVal + data[0],
-      step: 1,
-      slide: function(e, ui) {
-        return update(data[0], ui.value);
+      max: 100,
+      slide: function(event, ui) {
+        $(".a, .b, .c, .d").width(ui.value + "%");
+        Visuals.prototype.vars.data.tempTotal = Visuals.prototype.vars.data.total - ui.value / 100 * Visuals.prototype.vars.data.total;
+        return update(data[0], ui.value / 100 * Visuals.prototype.vars.data.total);
       }
     });
+    $(".ui-slider-handle").html("&#xf053;&#xf054;");
     return update = function(old, value) {
-      var difference, newData;
-      newData = [value, sumOtherVal + old - value];
-      difference = Math.floor(Math.round((sumOtherVal - newData[1]) / otherValues.length));
-      console.log(difference);
+      var newData;
+      newData = [value, Visuals.prototype.vars.data.total - value];
       arcs.data(layout(newData));
       return arcs.select("path").attr("d", arc);
     };
+  };
+
+  Visuals.prototype.updateGraph = function(sector) {
+    return console.log(Visuals.prototype.vars.data.tempTotal);
+  };
+
+  Visuals.prototype.tempLightboxGraph = function() {
+    return Visuals.prototype.drawGraph();
   };
 
   return Visuals;
