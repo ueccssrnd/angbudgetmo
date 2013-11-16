@@ -15,12 +15,40 @@ box-sizing()
   -moz-box-sizing: arguments
   box-sizing: arguments
 
+transform() 
+  -webkit-transform: arguments
+  -moz-transform: arguments
+  -ms-transform: arguments
+  -o-transform: arguments
+  transform: arguments
+
+transform-style() 
+  -webkit-transform-style: arguments
+  -moz-transform-style: arguments
+  -ms-transform-style: arguments
+  -o-transform-style: arguments
+  transform-style: arguments
+
+transform-origin()
+  -webkit-transform-origin: arguments
+  -moz-transform-origin: arguments
+  -o-transform-origin: arguments
+  -ms-transform-origin: arguments
+  transform-origin: arguments
+
+perspective()
+  -webkit-perspective: arguments
+  -moz-perspective: arguments
+  -ms-perspective: arguments
+  -o-perspective: arguments
+  perspective: arguments
+
 transtion()
   -webkit-transition: arguments
   -moz-transition: arguments
   -ms-transition: arguments
   -o-transtion: arguments
-
+  transtion: arguments
 ::-webkit-scrollbar-track
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
   background-color: #f5f5f5
@@ -31,6 +59,73 @@ transtion()
 
 ::-webkit-scrollbar-thumb
   background-color: #000
+
+@font-face
+  font-family: 'OpenSansBold';
+  src: url('../fonts/opensans/opensans-bold-webfont.eot');
+  src: url('../fonts/opensans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-bold-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-bold-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-bold-webfont.svg#OpenSansBold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+@font-face
+  font-family: 'OpenSansExtrabold';
+  src: url('../fonts/opensans/opensans-extrabold-webfont.eot');
+  src: url('../fonts/opensans/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-extrabold-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-extrabold-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-extrabold-webfont.svg#OpenSansExtrabold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+@font-face
+  font-family: 'OpenSansItalic';
+  src: url('../fonts/opensans/opensans-italic-webfont.eot');
+  src: url('../fonts/opensans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-italic-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-italic-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-italic-webfont.svg#OpenSansItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+@font-face
+  font-family: 'OpenSans';
+  src: url('../fonts/opensans/opensans-regular-webfont.eot');
+  src: url('../fonts/opensans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-regular-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-regular-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+@font-face
+  font-family: 'OpenSansLight';
+  src: url('../fonts/opensans/opensans-light-webfont.eot');
+  src: url('../fonts/opensans/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-light-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-light-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-light-webfont.svg#OpenSansRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+@font-face
+  font-family: 'OpenSansSemibold';
+  src: url('../fonts/opensans/opensans-semibold-webfont.eot');
+  src: url('../fonts/opensans/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-semibold-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-semibold-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-semibold-webfont.svg#OpenSansSemibold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+@font-face
+  font-family: 'OpenSansSemiboldItalic';
+  src: url('../fonts/opensans/opensans-semibolditalic-webfont.eot');
+  src: url('../fonts/opensans/opensans-semibolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/opensans/opensans-semibolditalic-webfont.woff') format('woff'),
+  url('../fonts/opensans/opensans-semibolditalic-webfont.ttf') format('truetype'),
+  url('../fonts/opensans/opensans-semibolditalic-webfont.svg#OpenSansSemiboldItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
 
 
 html, body
@@ -176,7 +271,8 @@ nav.fixed-top
   overflow auto
 
 #lightbox
-  background rgba(255,255,255,1)
+  background rgba(50,50,50,0.9)
+  box-shadow 2px 2px 5px rgba(0,0,0,0.4)
   position fixed
   top 20px
   left 20px
@@ -185,7 +281,7 @@ nav.fixed-top
   transition ease-in-out all 0.2s
   z-index 999999
   > .light-close
-    color #333
+    color #ccc
     position absolute
     right 10px
     top 10px
@@ -196,9 +292,67 @@ nav.fixed-top
     bottom 10px
     right 20px
     left 20px
-    border 1px solid #f5f5f5
+    > .graph-context
+      z-index 999999
+      .bubble
+        margin-top 20px
+        width 80%
+        height auto
+        padding 10px
+        box-shadow 3px 3px 5px rgba(0,0,0,0.4)
+        h1,h2
+          text-shadow 1px 1px 1px rgba(255,255,255,0.9)
+        h1
+          font 2em OpenSansSemibold
+          font-weight 400
+          color #333
+          margin-left 20px
+          padding-top 10px
+        h2 
+          font 1.5em OpenSans
+          color: #666
+          margin-left 20px
+          padding-bottom 10px
+        > ul
+          list-style none
+          padding 10px
+          margin 0
+          li
+            height 50px
+            padding-bottom 5px
+            margin-bottom 5px
+            box-shadow 0 1px 0 rgba(255,255,255,0.9)
+            border-bottom 1px solid rgba(0,0,0,0.1)
+            &:last-child
+              box-shadow none
+              border-bottom 0
+            img
+              display inline-block
+              height 100%
+            p
+              color #222
+              padding-left 10px
+              display inline-block
+              vertical-align middle
+    > .graph-preview
+      z-index 999999
+      > .graph
+        height 80%
+      > .graph-slider
+        height 20%
+        position relative
+    > .graph-parts-nav
+        position absolute
+        bottom 0
+        right 0
+        left 0
+        height 20%
+    > .light-section
+        // background #ccc
+        height 80%
 
-  
+
+
 
 // template styles
 h1.title, span.icn-desc
@@ -225,8 +379,8 @@ span.icn-desc.title
 
 .overlay
   background rgba(0,0,0,0.7)
-  // display none
-  display block
+  display none
+  // display block
   position fixed
   top 0
   bottom 0
@@ -246,3 +400,111 @@ span.icn-desc.title
   outline-color #bfe80c
   padding 5px
   
+.bubble 
+  position relative
+  width 250px
+  height 120px
+  padding 0px
+  background rgba(255,255,255,0.9)
+  border-radius 10px
+  &:after
+    content ''
+    position absolute
+    border-style solid
+    border-width 15px 15px 15px 0
+    border-color transparent rgba(255,255,255,0.9)
+    display block
+    width 0
+    z-index 1
+    left -15px
+    top 48%
+hr
+  border-color rgba(0,0,0,0.2)
+  margin-top 10px
+  margin-bottom 10px
+
+#slider
+  position absolute
+  top 50%
+  left 50%
+  transform  translate(-50%, -50%)
+  width 80%
+  cursor -webkit-grab
+  cursor -moz-grab
+
+
+// slider thing
+.cube
+  position relative
+  width 500px
+  height 60px
+  margin 5rem auto
+  transform-style preserve-3d
+  perspective 400px
+// .positions
+.a, .b, .c, .d
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  left: 0px;
+  z-index: 222;
+.a:before, .b:before, .c:before, .d:before 
+  z-index: 111;
+
+.a:after, .b:after 
+  z-index: 333;
+
+.b 
+  top: 0px;
+  transform: rotateX(75deg) translateY(-60px);
+  transform-origin: 0% 0%;
+
+.c 
+  top: 0px;
+  transform: rotateX(75deg);
+  transform-origin: 100% 100%;
+
+.d 
+  transform: translateZ(-60px) translateY(-15px);
+
+/* colors */
+.a, .b 
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(116,198,43,0.8)), to(rgba(116,198,43,0.8)));
+  background-image: -webkit-linear-gradient(top, rgba(116,198,43,0.8), rgba(116,198,43,0.8));
+  background-image: -moz-linear-gradient(top, rgba(116,198,43,0.8), rgba(116,198,43,0.8));
+  background-image: -o-linear-gradient(top, rgba(116,198,43,0.8), rgba(116,198,43,0.8));
+  background-image: linear-gradient(to bottom, rgba(116,198,43,0.8), rgba(116,198,43,0.8));
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0% 0%;
+
+
+.c, .d 
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(116,198,43,0.5)), to(rgba(116,198,43,0.5)));
+  background-image: -webkit-linear-gradient(top, rgba(116,198,43,0.5), rgba(116,198,43,0.5));
+  background-image: -moz-linear-gradient(top, rgba(116,198,43,0.5), rgba(116,198,43,0.5));
+  background-image: -o-linear-gradient(top, rgba(116,198,43,0.5), rgba(116,198,43,0.5));
+  background-image: linear-gradient(to bottom, rgba(116,198,43,0.5), rgba(116,198,43,0.5));
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0% 0%;
+
+.c:before 
+  box-shadow: 0px 30px 20px -20px rgba(0,0,0,0.4), 0px 40px 15px -15px rgba(0,0,0,0.25);
+
+.a:before, .b:before, .c:before, .d:before 
+  background-color: rgba(0,0,0,0.05);
+
+.a:after 
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.07)), to(rgba(0,0,0,0)));
+  background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.07), rgba(0,0,0,0));
+  background-image: -moz-linear-gradient(top, rgba(0,0,0,0.07), rgba(0,0,0,0));
+  background-image: -o-linear-gradient(top, rgba(0,0,0,0.07), rgba(0,0,0,0));
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.07), rgba(0,0,0,0));
+
+.b:after 
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.1)), to(rgba(255,255,255,0.25)));
+  background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.25));
+  background-image: -moz-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.25));
+  background-image: -o-linear-gradient(top, rgba(255,255,255,0.1), rgba(255,255,255,0.25));
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.25));

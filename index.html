@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="vendors/css/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="vendors/css/fontawesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="vendors/js/jquery-ui-1.10.3/themes/base/minified/jquery-ui.min.css">
 
 </head>
 <body>
@@ -42,12 +43,47 @@
   <div id="lightbox">
     <span class="light-close fa fa-times"></span>
     <section class="content">
-      <div id="graph-preview" class="col-sm-6">Test</div>
-      <div id="graph-context" class="col-sm-6">Test</div>
-      <div id="graph-parts-nav" class="col-sm-12">Full</div>
+      <div class="graph-preview light-section col-sm-6">
+        <div class="graph"></div>
+        <div class="graph-slider">
+          <div id="slider"></div>
+          </div> 
+      </div>
+      <div class="graph-context light-section col-sm-6">
+        <section class="bubble">
+          <h1 class="cat-sector">Sector</h1>
+          <h2 class="sector-budget"><span class="cash">33.5B </span>(<span class="percentage">35.1%</span>)</h2>
+          <hr>
+          <ul>
+            <li>
+              <img src="assets/img/" alt="">
+              <p><span class="items-count">300,000</span><span class="item-name"> Books</span>(<span class="item-price">300 / book</span>)</p>
+            </li>
+            <li>
+              <img src="assets/img/" alt="">
+              <p><span class="items-count">300,000</span><span class="item-name"> Books</span>(<span class="item-price">300 / book</span>)</p>
+            </li>
+            <li>
+              <img src="assets/img/" alt="">
+              <p><span class="items-count">300,000</span><span class="item-name"> Books</span>(<span class="item-price">300 / book</span>)</p>
+            </li>
+            <li>
+              <img src="assets/img/" alt="">
+              <p><span class="items-count">300,000</span><span class="item-name"> Books</span>(<span class="item-price">300 / book</span>)</p>
+            </li>
+            <li>
+              <img src="assets/img/" alt="">
+              <p><span class="items-count">300,000</span><span class="item-name"> Books</span>(<span class="item-price">300 / book</span>)</p>
+            </li>
+          </ul>
+        </section>
+      </div>
+      <div class="graph-parts-nav">Full</div>
     </section>
   </div>
   <script src="vendors/js/jquery/jquery-2.0.3.min.js"></script>
+  <script src="vendors/js/jquery-ui-1.10.3/ui/minified/jquery-ui.min.js"></script>
+  <script src="vendors/js/d3/d3.v3.min.js"></script>
   <script src="assets/js/core.js"></script>
 </body>
 </html>

@@ -9,6 +9,55 @@
 ::-webkit-scrollbar-thumb {
   background-color: #000;
 }
+@font-face {
+  font-family: 'OpenSansBold';
+  src: url("../fonts/opensans/opensans-bold-webfont.eot");
+  src: url("../fonts/opensans/opensans-bold-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-bold-webfont.woff") format('woff'), url("../fonts/opensans/opensans-bold-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-bold-webfont.svg#OpenSansBold") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSansExtrabold';
+  src: url("../fonts/opensans/opensans-extrabold-webfont.eot");
+  src: url("../fonts/opensans/opensans-extrabold-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-extrabold-webfont.woff") format('woff'), url("../fonts/opensans/opensans-extrabold-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-extrabold-webfont.svg#OpenSansExtrabold") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSansItalic';
+  src: url("../fonts/opensans/opensans-italic-webfont.eot");
+  src: url("../fonts/opensans/opensans-italic-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-italic-webfont.woff") format('woff'), url("../fonts/opensans/opensans-italic-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-italic-webfont.svg#OpenSansItalic") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url("../fonts/opensans/opensans-regular-webfont.eot");
+  src: url("../fonts/opensans/opensans-regular-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-regular-webfont.woff") format('woff'), url("../fonts/opensans/opensans-regular-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-regular-webfont.svg#OpenSansRegular") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSansLight';
+  src: url("../fonts/opensans/opensans-light-webfont.eot");
+  src: url("../fonts/opensans/opensans-light-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-light-webfont.woff") format('woff'), url("../fonts/opensans/opensans-light-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-light-webfont.svg#OpenSansRegular") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSansSemibold';
+  src: url("../fonts/opensans/opensans-semibold-webfont.eot");
+  src: url("../fonts/opensans/opensans-semibold-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-semibold-webfont.woff") format('woff'), url("../fonts/opensans/opensans-semibold-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-semibold-webfont.svg#OpenSansSemibold") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSansSemiboldItalic';
+  src: url("../fonts/opensans/opensans-semibolditalic-webfont.eot");
+  src: url("../fonts/opensans/opensans-semibolditalic-webfont.eot?#iefix") format('embedded-opentype'), url("../fonts/opensans/opensans-semibolditalic-webfont.woff") format('woff'), url("../fonts/opensans/opensans-semibolditalic-webfont.ttf") format('truetype'), url("../fonts/opensans/opensans-semibolditalic-webfont.svg#OpenSansSemiboldItalic") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 html,
 body {
   height: 100%;
@@ -184,7 +233,8 @@ nav.fixed-top {
   overflow: auto;
 }
 #lightbox {
-  background: #fff;
+  background: rgba(50,50,50,0.9);
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
   position: fixed;
   top: 20px;
   left: 20px;
@@ -194,7 +244,7 @@ nav.fixed-top {
   z-index: 999999;
 }
 #lightbox > .light-close {
-  color: #333;
+  color: #ccc;
   position: absolute;
   right: 10px;
   top: 10px;
@@ -206,7 +256,79 @@ nav.fixed-top {
   bottom: 10px;
   right: 20px;
   left: 20px;
-  border: 1px solid #f5f5f5;
+}
+#lightbox > .content > .graph-context {
+  z-index: 999999;
+}
+#lightbox > .content > .graph-context .bubble {
+  margin-top: 20px;
+  width: 80%;
+  height: auto;
+  padding: 10px;
+  box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
+}
+#lightbox > .content > .graph-context .bubble h1,
+#lightbox > .content > .graph-context .bubble h2 {
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.9);
+}
+#lightbox > .content > .graph-context .bubble h1 {
+  font: 2em OpenSansSemibold;
+  font-weight: 400;
+  color: #333;
+  margin-left: 20px;
+  padding-top: 10px;
+}
+#lightbox > .content > .graph-context .bubble h2 {
+  font: 1.5em OpenSans;
+  color: #666;
+  margin-left: 20px;
+  padding-bottom: 10px;
+}
+#lightbox > .content > .graph-context .bubble > ul {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+}
+#lightbox > .content > .graph-context .bubble > ul li {
+  height: 50px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+#lightbox > .content > .graph-context .bubble > ul li:last-child {
+  box-shadow: none;
+  border-bottom: 0;
+}
+#lightbox > .content > .graph-context .bubble > ul li img {
+  display: inline-block;
+  height: 100%;
+}
+#lightbox > .content > .graph-context .bubble > ul li p {
+  color: #222;
+  padding-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+#lightbox > .content > .graph-preview {
+  z-index: 999999;
+}
+#lightbox > .content > .graph-preview > .graph {
+  height: 80%;
+}
+#lightbox > .content > .graph-preview > .graph-slider {
+  height: 20%;
+  position: relative;
+}
+#lightbox > .content > .graph-parts-nav {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 20%;
+}
+#lightbox > .content > .light-section {
+  height: 80%;
 }
 h1.title,
 span.icn-desc {
@@ -237,7 +359,7 @@ span.icn-desc.title > a > i[class*='icon'] {
 }
 .overlay {
   background: rgba(0,0,0,0.7);
-  display: block;
+  display: none;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -257,4 +379,60 @@ span.icn-desc.title > a > i[class*='icon'] {
 [contentEditable]:focus {
   outline-color: #bfe80c;
   padding: 5px;
+}
+.bubble {
+  position: relative;
+  width: 250px;
+  height: 120px;
+  padding: 0px;
+  background: rgba(255,255,255,0.9);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.bubble:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 15px 15px 15px 0;
+  border-color: transparent rgba(255,255,255,0.9);
+  display: block;
+  width: 0;
+  z-index: 1;
+  left: -15px;
+  top: 48%;
+}
+hr {
+  border-color: rgba(0,0,0,0.2);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#slider {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 80%;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+.cube {
+  position: relative;
+  width: 500px;
+  height: 60px;
+  margin: 5rem auto;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-perspective: 400px;
+  -moz-perspective: 400px;
+  -ms-perspective: 400px;
+  -o-perspective: 400px;
+  perspective: 400px;
 }
