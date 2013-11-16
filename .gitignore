@@ -3,3 +3,6 @@ assets/img/
 assets/fonts/
 vendors/js/jquery-ui-1.10.3/
 vendors/js/jquery-ui/
+
+.DS_Store
+api/nbproject
