@@ -1,4 +1,4 @@
-height = 600
+height = 500
 width = 1000
 
 expanded = false
@@ -10,7 +10,7 @@ collatedData = [60,70,80, 90,100]
 color = d3.scale.category20b()
 radius = 150
 
-canvas = d3.select("body")
+canvas = d3.select("#graphs")
           .append("svg")
           .style("width", width)
           .style("height", height)
@@ -57,7 +57,7 @@ collatedDoughnut = collatedArcs.append("path")
                   .attr("stroke", "#fff")
                   .attr("stroke-width", 2)
 collatedGroup.append("circle")
-            .classed("collapse", true)
+            .classed("nav-collapse", true)
             .attr("cx", 0)
             .attr("cy", 0)
             .attr("r", radius * 0.4 - 10)
@@ -81,7 +81,7 @@ govDoughnut = govArcs.append("path")
               .attr("stroke", "#fff")
               .attr("stroke-width", 2)
 govGroup.append("circle")
-        .classed("collapse", true)
+        .classed("nav-collapse", true)
         .classed("nav", true)
         .attr("cx", 0)
         .attr("cy", 0)

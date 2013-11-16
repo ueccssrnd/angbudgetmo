@@ -1,15 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Hackathon Data.gov.ph</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Hackathon Data.gov.ph</title>
+<link rel="stylesheet" href="vendors/css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="vendors/css/fontawesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 <body>
-  
-
+  <div id="wrapper">
+    <nav id="top-nav" class="fixed-top">
+      <div class="container">
+        <section class="branding col-md-6">
+          <strong>AngBudgetMo</strong> - Learn How They Do It!
+        </section>
+        <ul id="primary-nav" class="col-md-6" ng-app="navApp" ng-controller="navCtrl">
+          <li class="search subnav">
+            <input type="search" id="txtSearch" placeholder="search">
+            <button id="btnSearch"><i class="fa fa-search"></i></button>
+          <li class="subnav"><i class="fa fa-home"></i>
+          <li id="secondary-nav" class="subnav">
+            <i class="fa fa-user"></i>
+            Hi <span class="user"></span>!
+        </ul>
+      </div>
+    </nav>
+    <section class="page-info spacer">
+      <h1 class="page-title"><i class="fa fa-book"></i>AngBudgetMo</h1>
+    </section>
+    <nav id="breadcrumbs">
+      <ul>
+        <li><i id="lnk-home" class="fa fa-home"></i>Home
+        <!-- <li><i id="lnk-login" class="fa fa-angle-double-right"></i>Login -->
+      </ul>
+    </nav>
+    <div id="content">
+    </div>
+  </div>
+  <div class="overlay"></div>
+  <div id="lightbox">
+    
+  </div>
   <script src="vendors/js/jquery/jquery-2.0.3.min.js"></script>
-  <script src="vendors/js/d3/d3.v3.min.js"></script>
-  <script src="assets/js/custom.js"></script>
+  <script src="assets/js/core.js"></script>
 </body>
 </html>
