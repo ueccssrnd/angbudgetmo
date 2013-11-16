@@ -4,11 +4,11 @@ width = 1000
 expanded = false
 
 govData = [10,50,80,30, 150]
-customData = [60,70,80, 90,100]
+collatedData = [60,70,80, 90,100]
 
 # ui thing, like color, radius, position etc
 color = d3.scale.category20b()
-radius = 200
+radius = 150
 
 canvas = d3.select("body")
           .append("svg")
@@ -20,6 +20,14 @@ canvas = d3.select("body")
           .style("margin-left", -1 * width / 2 + "px")
           .style("transform", "translate(10, '-50%')")
 
+line = canvas.append("line")
+        .attr("x1", 500)
+        .attr("x2", 500)
+        .attr("y1", 0)
+        .attr("y2", 500)
+        .attr("stroke", "#ccc")
+        .attr("stroke-width", 2)
+
 # general chart props
 arc = d3.svg.arc()
       .outerRadius(radius)
@@ -30,25 +38,25 @@ layout = d3.layout.pie()
           return d
         )
 
-# customGroup
-customGroup = canvas.append("g")
-              .attr("class", "customGroup")
+# collatedGroup
+collatedGroup = canvas.append("g")
+              .attr("class", "collatedGroup")
               .attr("transform", "translate(200,200)")
 
-customArcs = customGroup.selectAll(".custom-arc")
-            .data(layout(customData))
+collatedArcs = collatedGroup.selectAll(".collated-arc")
+            .data(layout(collatedData))
             .enter()
             .append("g")
-            .attr("class", "arc custom-arc")
+            .attr("class", "arc collated-arc")
 
-customDoughnut = customArcs.append("path")
+collatedDoughnut = collatedArcs.append("path")
                   .attr("d", arc)
                   .attr("fill", (d) ->
                     return color(d.data)
                   )
                   .attr("stroke", "#fff")
                   .attr("stroke-width", 2)
-customGroup.append("circle")
+collatedGroup.append("circle")
             .classed("collapse", true)
             .attr("cx", 0)
             .attr("cy", 0)
