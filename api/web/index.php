@@ -39,8 +39,8 @@ $app->get('/users/{id}', function($id) use ($app) {
 $app->get('/people', function() use ($app) {
             $sql = "SELECT * FROM users WHERE users.id = 1";
             $people['user'] = reset($app['db']->fetchAll($sql));
-            $sql = "SELECT user_id, category_id, AVG(budget_allocation) as budget_allocation, AVG(amount) as amount
-                FROM allocations WHERE user_id > 1 GROUP BY category_id ";
+            $sql = "SELECT user_id, category_id,  categories.full_name as sector, AVG(budget_allocation) as budget_allocation, AVG(amount) as amount
+                FROM allocations JOIN categories on categories.id = allocations.category_id WHERE user_id > 1 GROUP BY category_id ";
             $people['allocations'] = $app['db']->fetchAll($sql);
 
             $sql = "SELECT full_name, amount, unit, image
