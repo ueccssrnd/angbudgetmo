@@ -8,7 +8,8 @@ BudgetMo = (function() {
     base_url: "/",
     tpl_path: "public/tpl/",
     user: "anonymous",
-    logged: 0
+    logged: 0,
+    counter: 0
   };
 
   BudgetMo.prototype.init = function() {
@@ -22,11 +23,26 @@ BudgetMo = (function() {
       return BudgetMo.prototype.ui.lightbox.hide();
     });
     return $('.graph-picker').on('click', 'a', function(e) {
-      var sector;
+      var current, k, numberWithCommas, sector, serviceList, v, _ref, _results;
       sector = $(this).data('sector');
       Visuals.prototype.updateGraph(sector);
       $('.graph-parts-nav').find('a.active').removeClass('active');
-      return $(this).addClass('active');
+      $(this).addClass('active');
+      BudgetMo.prototype.vars.counter++;
+      current = Visuals.prototype.vars.data.custom.allocations[BudgetMo.prototype.vars.counter];
+      $('.cat-sector').text(current.sector);
+      numberWithCommas = function(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      };
+      $('.sector-budget').find('.cash').text("" + (numberWithCommas(parseInt(current.amount))));
+      serviceList = $('.bubble').find('ul').html("");
+      _ref = current.assignments;
+      _results = [];
+      for (k in _ref) {
+        v = _ref[k];
+        _results.push(serviceList.append("<li><img src='assets/img/' alt=''><p><span class='items-count'>" + (numberWithCommas((Visuals.prototype.vars.data.total - Visuals.prototype.temp.remaining) / v.amount)) + "</span> <span class='item-name'>" + v.full_name + "</span> (<span class='item-price'>" + v.amount + " </span>)"));
+      }
+      return _results;
     });
   };
 
@@ -56,6 +72,7 @@ Visuals = (function() {
 
   Visuals.prototype.vars = {
     data: {
+      total: 0,
       gov: [10, 50, 80, 30, 150],
       collated: [60, 70, 80, 90, 100],
       custom: {
@@ -192,6 +209,12 @@ Visuals = (function() {
     }
   };
 
+  Visuals.prototype.temp = {
+    remaining: 0,
+    current: 0,
+    saved: []
+  };
+
   Visuals.prototype.init = function() {
     var color, height, radius, width;
     height = 400;
@@ -201,19 +224,19 @@ Visuals = (function() {
   };
 
   Visuals.prototype.drawGraph = function() {
-    var arc, arcs, canvas, color, data, doughnut, group, height, i, image, layout, radius, sum, update, width, _i, _len, _ref;
-    sum = 0;
+    var arc, arcs, canvas, color, current, currentSector, data, doughnut, group, height, i, image, k, layout, numberWithCommas, radius, sectorCounter, serviceList, update, v, width, _i, _len, _ref, _ref1, _results;
     height = "100%";
     width = "100%";
     radius = 150;
+    currentSector = $('.graph-picker').find('a.active').data('sector');
     _ref = Visuals.prototype.vars.data.custom.allocations;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       i = _ref[_i];
-      sum += parseInt(i.amount);
+      Visuals.prototype.vars.data.total += parseInt(i.amount);
     }
-    data = [0, sum];
-    color = ["#fcc427", "#999"];
-    image = "social";
+    data = [0, Visuals.prototype.vars.data.total];
+    color = ["gold", "#999"];
+    image = currentSector;
     canvas = d3.select(".graph-preview .graph").append("svg").style("width", width).style("height", height);
     arc = d3.svg.arc().outerRadius(radius).innerRadius(radius * 0.8);
     layout = d3.layout.pie().sort(null).value(function(d) {
@@ -226,7 +249,7 @@ Visuals = (function() {
     doughnut = arcs.append("path").attr("d", arc).attr("fill", function(d, i) {
       return color[i];
     }).attr("stroke", "#fff").attr("stroke-width", 2);
-    $('.total-budget span').text(sum);
+    $('.total-budget span').text(Visuals.prototype.vars.data.total);
     $(".a, .b, .c, .d").width(0);
     $("#slider-range-min").slider({
       range: "min",
@@ -234,26 +257,49 @@ Visuals = (function() {
       min: 0,
       max: 100,
       slide: function(event, ui) {
-        var tempTotal;
         $(".a, .b, .c, .d").width(ui.value + "%");
-        tempTotal = (100 - ui.value) / 100 * sum;
-        $('.total-budget span').text(tempTotal);
-        return update(ui.value / 100 * sum);
+        Visuals.prototype.temp.remaining = (100 - ui.value) / 100 * Visuals.prototype.vars.data.total;
+        $('.total-budget span').text(Math.floor(Math.ceil(Visuals.prototype.temp.remaining)));
+        return update(Visuals.prototype.temp.current = Visuals.prototype.vars.data.total - Visuals.prototype.temp.remaining, Visuals.prototype.temp.remaining);
       }
     });
     $(".ui-slider-handle").html("&#xf053;&#xf054;");
-    return update = function(value) {
+    update = function(value, remaining) {
       var newData;
-      newData = [0, sum - value];
+      newData = [value, remaining];
       arcs.data(layout(newData));
       return arcs.select("path").attr("d", arc);
     };
+    sectorCounter = 0;
+    current = Visuals.prototype.vars.data.custom.allocations[sectorCounter];
+    $('.cat-sector').text(current.sector);
+    numberWithCommas = function(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+    $('.sector-budget').find('.cash').text("" + (numberWithCommas(parseInt(current.amount))));
+    serviceList = $('.bubble').find('ul');
+    _ref1 = current.assignments;
+    _results = [];
+    for (k in _ref1) {
+      v = _ref1[k];
+      _results.push(serviceList.append("<li><img src='assets/img/' alt=''><p><span class='items-count'>" + (numberWithCommas((Visuals.prototype.vars.data.total - Visuals.prototype.temp.remaining) / v.amount)) + "</span> <span class='item-name'>" + v.full_name + "</span> (<span class='item-price'>" + v.amount + " </span>)"));
+    }
+    return _results;
   };
 
-  Visuals.prototype.updateGraph = function(sector) {};
-
-  Visuals.prototype.tempLightboxGraph = function() {
-    return Visuals.prototype.drawGraph();
+  Visuals.prototype.updateGraph = function(sector) {
+    var arc, canvas, group, image, layout, radius;
+    Visuals.prototype.vars.data.total = Visuals.prototype.temp.remaining;
+    $("#slider-range-min").slider("value", $("#slider-range-min").slider("option", "min"));
+    $(".a, .b, .c, .d").width(0);
+    arc = d3.svg.arc().outerRadius(radius).innerRadius(radius * 0.8);
+    layout = d3.layout.pie().sort(null).value(function(d) {
+      return d;
+    });
+    radius = 150;
+    canvas = d3.select(".graph-preview");
+    group = canvas.select(".graph-group");
+    return image = group.select("image").attr("xlink:href", "assets/img/" + sector + "-150.png");
   };
 
   return Visuals;
