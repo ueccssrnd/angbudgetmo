@@ -51,6 +51,97 @@ class BudgetMo
       for k, v of sectors
         if v.sector isnt "Debt Burden"
           $('.graph-parts-nav').append("<li class='graph-picker'><a href='#' data-sector='#{k}'><img src='assets/img/#{v.image}'></a></li>")
+
+      height = 500
+      width = 1000
+
+      expanded = false
+
+      govData = [10,50,80,30, 150]
+      collatedData = [60,70,80, 90,100]
+
+      # ui thing, like color, radius, position etc
+      color = d3.scale.category20b()
+      radius = 150
+
+      canvas = d3.select("#content")
+                .append("svg")
+                .style("width", width)
+                .style("height", height)
+                .style("position", "absolute")
+                .style("top", 100)
+                .style("left", '50%')
+                .style("margin-left", -1 * width / 2 + "px")
+                .style("transform", "translate(10, '-50%')")
+
+      line = canvas.append("line")
+              .attr("x1", 500)
+              .attr("x2", 500)
+              .attr("y1", 0)
+              .attr("y2", 500)
+              .attr("stroke", "#ccc")
+              .attr("stroke-width", 2)
+
+      # general chart props
+      arc = d3.svg.arc()
+            .outerRadius(radius)
+            .innerRadius(radius * 0.4)
+
+      layout = d3.layout.pie()
+              .value( (d) ->
+                return d
+              )
+
+      # collatedGroup
+      collatedGroup = canvas.append("g")
+                    .attr("class", "collatedGroup")
+                    .attr("transform", "translate(200,200)")
+
+      collatedArcs = collatedGroup.selectAll(".collated-arc")
+                  .data(layout(collatedData))
+                  .enter()
+                  .append("g")
+                  .attr("class", "arc collated-arc")
+
+      collatedDoughnut = collatedArcs.append("path")
+                        .attr("d", arc)
+                        .attr("fill", (d) ->
+                          return color(d.data)
+                        )
+                        .attr("stroke", "#fff")
+                        .attr("stroke-width", 2)
+      collatedGroup.append("circle")
+                  .classed("nav-collapse", true)
+                  .attr("cx", 0)
+                  .attr("cy", 0)
+                  .attr("r", radius * 0.4 - 10)
+                  .attr("fill", color(radius * 0.4 - 10))
+
+      # govGroup
+      govGroup =  canvas.append("g")
+                  .attr("class", "govGroup")
+                  .attr("transform", "translate(800,200)")
+
+      govArcs = govGroup.selectAll(".gov-arc")
+                  .data(layout(govData))
+                  .enter()
+                  .append("g")
+                  .attr("class", "arc gov-arc")
+      govDoughnut = govArcs.append("path")
+                    .attr("d", arc)
+                    .attr("fill", (d) ->
+                      return color(d.data)
+                    )
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 2)
+      govGroup.append("circle")
+              .classed("nav-collapse", true)
+              .classed("nav", true)
+              .attr("cx", 0)
+              .attr("cy", 0)
+              .attr("r", radius * 0.4 - 10)
+              .attr("fill", color(radius * 0.4 - 10))
+
     lightbox: {
       show: () ->
         $('#lightbox').show()
@@ -133,20 +224,19 @@ class Visuals
       min: 0,
       max: 100,
       slide: ( event, ui ) ->
+        numberWithCommas = (x) ->
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         $(".a, .b, .c, .d").width(ui.value + "%")
         Visuals::temp.current = ui.value / 100 * Visuals::vars.data.total
         $('.sector-budget').find('.cash').text(Visuals::temp.current)
 
-        console.log Visuals::temp.current 
         Visuals::temp.remaining = (100 - ui.value) / 100 * Visuals::vars.data.total
-        $('.total-budget span').text(Math.floor(Math.ceil(Visuals::temp.remaining)))
+        $('.total-budget span').text(Math.round(Math.ceil(Visuals::temp.remaining)))
         update(Visuals::vars.data.total -  Visuals::temp.remaining, Visuals::temp.remaining)
 
         currentSector = if $('.graph-picker').find('a.active').data('sector') is undefined then 0 else $('.graph-picker').find('a.active').data('sector')
 
         serviceList = $('.bubble').find('ul').html("")
-        numberWithCommas = (x) ->
-          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         $('.cat-sector').text(Visuals::vars.data.custom.allocations[currentSector].sector)
         $('.sector-budget').find('.cash').text("P" + numberWithCommas(Visuals::temp.current) + " (#{ui.value}%)")
         for k, v of Visuals::vars.data.custom.allocations[currentSector].assignments
