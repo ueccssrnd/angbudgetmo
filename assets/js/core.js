@@ -8,13 +8,27 @@ BudgetMo = (function() {
     base_url: "/",
     tpl_path: "public/tpl/",
     user: "anonymous",
-    logged: 0
+    logged: 0,
+    counter: 0
   };
 
   BudgetMo.prototype.init = function() {
+    var i, _i, _len, _ref;
+    if (Visuals.prototype.vars.data.total === 0) {
+      _ref = Visuals.prototype.vars.data.custom.allocations;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        i = _ref[_i];
+        Visuals.prototype.vars.data.total += parseInt(i.amount);
+        if (i.sector === "Debt Burden") {
+          Visuals.prototype.vars.data.total -= parseInt(i.amount);
+        }
+      }
+    }
+    $('.total-budget span').text(Visuals.prototype.vars.data.total);
     this.ui.build();
     this.listen();
-    return Visuals.prototype.drawGraph();
+    Visuals.prototype.drawGraph();
+    return $('.graph-picker a:first').click();
   };
 
   BudgetMo.prototype.listen = function() {
@@ -22,9 +36,32 @@ BudgetMo = (function() {
       return BudgetMo.prototype.ui.lightbox.hide();
     });
     return $('.graph-picker').on('click', 'a', function(e) {
-      var sector;
+      var i, k, numberWithCommas, sector, serviceList, sum, v, _i, _len, _ref, _ref1, _results;
       sector = $(this).data('sector');
-      return Visuals.prototype.updateGraph(sector);
+      Visuals.prototype.vars.data.total = parseInt($('.total-budget span').text());
+      $('.total-budget span').text(Visuals.prototype.vars.data.total);
+      Visuals.prototype.updateGraph(sector);
+      $('.graph-parts-nav').find('a.active').removeClass('active');
+      $(this).addClass('active');
+      serviceList = $('.bubble').find('ul').html("");
+      numberWithCommas = function(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      };
+      $('.cat-sector').text(Visuals.prototype.vars.data.custom.allocations[sector].sector);
+      $('.sector-budget').find('.cash').text(Visuals.prototype.vars.data.custom.allocations[sector].budget_allocation + "M");
+      _ref = Visuals.prototype.vars.data.custom.allocations[sector].assignments;
+      _results = [];
+      for (k in _ref) {
+        v = _ref[k];
+        sum = 0;
+        _ref1 = Visuals.prototype.vars.data.custom.allocations;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          i = _ref1[_i];
+          sum = Visuals.prototype.vars.data.total + parseInt(i.amount);
+        }
+        _results.push(serviceList.append("<li><img src='assets/img/" + v.image + "' alt=''><p><span class='items-count'>" + (numberWithCommas((sum - Visuals.prototype.temp.remaining) / v.amount)) + "</span> <span class='item-name'>" + v.full_name + "</span> (<span class='item-price'>" + v.amount + " </span>)"));
+      }
+      return _results;
     });
   };
 
@@ -34,7 +71,20 @@ BudgetMo = (function() {
       page: {},
       content_tpl: "home"
     },
-    build: function() {},
+    build: function() {
+      var k, sectors, v, _results;
+      sectors = Visuals.prototype.vars.data.custom.allocations;
+      _results = [];
+      for (k in sectors) {
+        v = sectors[k];
+        if (v.sector !== "Debt Burden") {
+          _results.push($('.graph-parts-nav').append("<li class='graph-picker'><a href='#' data-sector='" + k + "'><img src='assets/img/" + v.image + "'></a></li>"));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    },
     lightbox: {
       show: function() {
         return $('#lightbox').show();
@@ -54,142 +104,167 @@ Visuals = (function() {
 
   Visuals.prototype.vars = {
     data: {
-      total: 10000000000,
-      tempTotal: Visuals.total,
+      total: 0,
       gov: [10, 50, 80, 30, 150],
       collated: [60, 70, 80, 90, 100],
       custom: {
-        "name": {
-          "id": "3",
-          "full_name": "Darll2",
-          "user_type": "citizen",
-          "email": "aryll2@gov.ph"
+        "user": {
+          "id": "1",
+          "full_name": "Government 2014",
+          "user_type": "government",
+          "email": "government@gov.ph"
         },
         "allocations": [
           {
             "sector": "Social Services",
-            "budget_allocation": "97",
-            "amount": "942800000",
+            "budget_allocation": "37",
+            "amount": "842800000",
             "category_id": "1",
+            "image": "social.png",
             "assignments": [
               {
                 "full_name": "Health facility",
                 "amount": "5",
-                "unit": ""
+                "unit": "",
+                "image": "hospital.png"
               }, {
                 "full_name": "Health worker",
                 "amount": "117045",
-                "unit": ""
+                "unit": "",
+                "image": "nurse.png"
               }, {
                 "full_name": "Classroom",
                 "amount": "873028",
-                "unit": ""
+                "unit": "",
+                "image": "school.png"
               }, {
                 "full_name": "Teacher",
                 "amount": "259082",
-                "unit": ""
+                "unit": "",
+                "image": "teacher.png"
               }, {
                 "full_name": "Textbook",
                 "amount": "195",
-                "unit": ""
+                "unit": "",
+                "image": "book.png"
               }
             ]
           }, {
             "sector": "Economic Services",
-            "budget_allocation": "96",
-            "amount": "990200000",
+            "budget_allocation": "26",
+            "amount": "590200000",
             "category_id": "2",
+            "image": "economic.png",
             "assignments": [
               {
                 "full_name": "Road",
                 "amount": "12",
-                "unit": "per km"
+                "unit": "per km",
+                "image": "road.png"
               }, {
-                "full_name": "Seedline",
+                "full_name": "Seedling",
                 "amount": "38",
-                "unit": ""
+                "unit": "",
+                "image": "seedling.png"
               }, {
                 "full_name": "Fist port",
                 "amount": "416",
-                "unit": ""
+                "unit": "",
+                "image": "fishport.png"
               }, {
                 "full_name": "Fertilizer",
                 "amount": "347",
-                "unit": "per sack"
+                "unit": "per sack",
+                "image": "fertilizer.png"
               }, {
                 "full_name": "Livestock",
                 "amount": "34",
-                "unit": ""
+                "unit": "",
+                "image": "livestock.png"
               }
             ]
           }, {
             "sector": "General Public Services",
-            "budget_allocation": "96",
-            "amount": "964500000",
+            "budget_allocation": "16",
+            "amount": "364500000",
             "category_id": "3",
+            "image": "public.png",
             "assignments": [
               {
                 "full_name": "Carrier truck",
                 "amount": "3",
-                "unit": ""
+                "unit": "",
+                "image": "truck.png"
               }, {
                 "full_name": "Business permit",
                 "amount": "4464",
-                "unit": ""
+                "unit": "",
+                "image": "businesspermit.png"
               }, {
                 "full_name": "NBI clearance",
                 "amount": "150",
-                "unit": ""
+                "unit": "",
+                "image": "nbi.png"
               }, {
                 "full_name": "Passport",
                 "amount": "2407",
-                "unit": ""
-              }, {
-                "full_name": "NBI clearance",
-                "amount": "150",
-                "unit": ""
+                "unit": "",
+                "image": "passport.png"
               }, {
                 "full_name": "Visa",
                 "amount": "328",
-                "unit": ""
+                "unit": "",
+                "image": "visa.png"
               }
             ]
           }, {
             "sector": "Debt Burden",
-            "budget_allocation": "97",
-            "amount": "977600000",
+            "budget_allocation": "17",
+            "amount": "377600000",
             "category_id": "4",
+            "image": "debt.png",
             "assignments": [
               {
                 "full_name": "Debt",
                 "amount": "338",
-                "unit": "total"
+                "unit": "total",
+                "image": "debt.png"
               }
             ]
           }, {
             "sector": "Defense",
-            "budget_allocation": "9",
+            "budget_allocation": "4",
             "amount": "92900000",
             "category_id": "5",
+            "image": "defense.png",
             "assignments": [
               {
                 "full_name": "Aircraft",
                 "amount": "35",
-                "unit": "per plane"
+                "unit": "per plane",
+                "image": "jet.png"
               }, {
                 "full_name": "Flood control structure",
                 "amount": "46",
-                "unit": ""
+                "unit": "",
+                "image": "floodcontrol.png"
               }, {
                 "full_name": "Vehicular radio",
                 "amount": "2",
-                "unit": ""
+                "unit": "",
+                "image": "radio.png"
               }
             ]
           }
         ]
       }
     }
+  };
+
+  Visuals.prototype.temp = {
+    remaining: 0,
+    current: 0,
+    saved: []
   };
 
   Visuals.prototype.init = function() {
@@ -201,20 +276,14 @@ Visuals = (function() {
   };
 
   Visuals.prototype.drawGraph = function() {
-    var arc, arcs, canvas, color, data, defSector, doughnut, group, height, i, image, layout, radius, sum, update, width, _i, _len, _ref;
-    sum = 0;
+    var arc, arcs, canvas, color, currentSector, data, doughnut, group, height, image, layout, radius, update, width;
     height = "100%";
     width = "100%";
     radius = 150;
-    defSector = Visuals.prototype.vars.data.custom.allocations[0];
-    _ref = Visuals.prototype.vars.data.custom.allocations;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      i = _ref[_i];
-      sum += parseInt(i.amount);
-    }
+    currentSector = $('.graph-picker').find('a.active').data('sector') === void 0 ? 0 : $('.graph-picker').find('a.active').data('sector');
     data = [0, Visuals.prototype.vars.data.total];
-    color = ["#fcc427", "#999"];
-    image = "social";
+    color = ["gold", "#999"];
+    image = Visuals.prototype.vars.data.custom.allocations[currentSector].image;
     canvas = d3.select(".graph-preview .graph").append("svg").style("width", width).style("height", height);
     arc = d3.svg.arc().outerRadius(radius).innerRadius(radius * 0.8);
     layout = d3.layout.pie().sort(null).value(function(d) {
@@ -222,39 +291,63 @@ Visuals = (function() {
     });
     group = canvas.append("g").attr("class", "graph-group").attr("transform", "translate(300,200)");
     group.append("circle").attr("cx", 0).attr("cy", 0).attr("r", radius * 0.8).attr("fill", "white");
-    group.append("image").attr("xlink:href", "assets/img/" + image + "-150.png").attr("x", radius / 2 * -1).attr("y", radius / 2 * -1).attr("width", radius).attr("height", radius);
+    group.append("image").attr("xlink:href", "assets/img/" + image).attr("x", radius / 2 * -1).attr("y", radius / 2 * -1).attr("width", radius).attr("height", radius);
     arcs = group.selectAll(".arc").data(layout(data)).enter().append("g").attr("class", "arc");
     doughnut = arcs.append("path").attr("d", arc).attr("fill", function(d, i) {
       return color[i];
     }).attr("stroke", "#fff").attr("stroke-width", 2);
-    $(".a, .b, .c, .d").width((data[0] / (data[0] + data[1]) * 100) + "%");
-    $('.total-budget').text(Visuals.prototype.vars.data.total);
+    $(".a, .b, .c, .d").width(0);
     $("#slider-range-min").slider({
       range: "min",
-      value: data[0] / (data[0] + data[1]) * 100,
+      value: 0,
       min: 0,
       max: 100,
       slide: function(event, ui) {
+        var k, numberWithCommas, serviceList, v, _ref, _results;
         $(".a, .b, .c, .d").width(ui.value + "%");
-        Visuals.prototype.vars.data.tempTotal = Visuals.prototype.vars.data.total - ui.value / 100 * Visuals.prototype.vars.data.total;
-        return update(data[0], ui.value / 100 * Visuals.prototype.vars.data.total);
+        Visuals.prototype.temp.current = ui.value / 100 * Visuals.prototype.vars.data.total;
+        $('.sector-budget').find('.cash').text(Visuals.prototype.temp.current);
+        console.log(Visuals.prototype.temp.current);
+        Visuals.prototype.temp.remaining = (100 - ui.value) / 100 * Visuals.prototype.vars.data.total;
+        $('.total-budget span').text(Math.floor(Math.ceil(Visuals.prototype.temp.remaining)));
+        update(Visuals.prototype.vars.data.total - Visuals.prototype.temp.remaining, Visuals.prototype.temp.remaining);
+        currentSector = $('.graph-picker').find('a.active').data('sector') === void 0 ? 0 : $('.graph-picker').find('a.active').data('sector');
+        serviceList = $('.bubble').find('ul').html("");
+        numberWithCommas = function(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+        $('.cat-sector').text(Visuals.prototype.vars.data.custom.allocations[currentSector].sector);
+        $('.sector-budget').find('.cash').text("P" + numberWithCommas(Visuals.prototype.temp.current) + (" (" + ui.value + "%)"));
+        _ref = Visuals.prototype.vars.data.custom.allocations[currentSector].assignments;
+        _results = [];
+        for (k in _ref) {
+          v = _ref[k];
+          _results.push(serviceList.append("<li><img src='assets/img/" + v.image + "' alt=''><p><span class='items-count'>" + (numberWithCommas(Visuals.prototype.temp.current / v.amount)) + "</span> <span class='item-name'>" + v.full_name + "</span> (<span class='item-price'>" + v.amount + " </span>)"));
+        }
+        return _results;
       }
     });
     $(".ui-slider-handle").html("&#xf053;&#xf054;");
-    return update = function(old, value) {
+    return update = function(value, remaining) {
       var newData;
-      newData = [value, Visuals.prototype.vars.data.total - value];
+      newData = [value, remaining];
       arcs.data(layout(newData));
       return arcs.select("path").attr("d", arc);
     };
   };
 
   Visuals.prototype.updateGraph = function(sector) {
-    return console.log(Visuals.prototype.vars.data.tempTotal);
-  };
-
-  Visuals.prototype.tempLightboxGraph = function() {
-    return Visuals.prototype.drawGraph();
+    var arc, canvas, group, image, layout, radius;
+    $("#slider-range-min").slider("value", $("#slider-range-min").slider("option", "min"));
+    $(".a, .b, .c, .d").width(0);
+    arc = d3.svg.arc().outerRadius(radius).innerRadius(radius * 0.8);
+    layout = d3.layout.pie().sort(null).value(function(d) {
+      return d;
+    });
+    radius = 150;
+    canvas = d3.select(".graph-preview");
+    group = canvas.select(".graph-group");
+    return image = group.select("image").attr("xlink:href", "assets/img/" + Visuals.prototype.vars.data.custom.allocations[sector].image);
   };
 
   return Visuals;
